@@ -159,13 +159,14 @@ Vamos a reescribir nuestro post para que delegue a la lógica de negocio el rest
 	- Las implementaciones son básicas, solo buscamos pasar el Test. Luego la idea es repetir la línea de pensamiento hasta que cumplamos con la funcionalidad solicitada.
 	- Las clases del dominio deberían haber sido creadas con pruebas específicas, en este momento nuestra prueba está probando tanto la implementación de UserService como la implementación de User. 
 
-## 9) Conectando la WebAPI REST con Application Layer
-	- Primero cambiaremos la implementación del método POST para que use **UserService/SignUp**.
-	- Luego veremos como conectar el controller de WebApi con el UserService. Lo que queremos conseguir es evitar la dependecia generada por el new UserService en el controller. Para esto usaremos la Invesión del Control provista por .NET Core, la cual funciona gracias a la inyección de dependencias. Cuando el Controller se instancie para atender una petición, sus dependencias serán inyectadas por .NET sin que tengamos que hacer new. 
-	- Este mismo principio puede ser utilizado para instanciar un único contexto de EntityFramework por cada petición. Trabajando de manera conectada durante el tiempo que demora en procesarse una petición. 
-	- En el siguiente paso veremos como configurar IOC.
+## 10) Conectando la WebAPI REST con Application Layer
 
-## 10) Configurando IOC
+- Primero cambiaremos la implementación del método POST para que use **UserService/SignUp**.
+- Luego veremos como conectar el controller de WebApi con el UserService. Lo que queremos conseguir es evitar la dependecia generada por el new UserService en el controller. Para esto usaremos la Invesión del Control provista por .NET Core, la cual funciona gracias a la inyección de dependencias. Cuando el Controller se instancie para atender una petición, sus dependencias serán inyectadas por .NET sin que tengamos que hacer new. 
+- Este mismo principio puede ser utilizado para instanciar un único contexto de EntityFramework por cada petición. Trabajando de manera conectada durante el tiempo que demora en procesarse una petición. 
+- En el siguiente paso veremos como configurar IOC.
+
+## 11) Configurando IOC
 
 - Sin hacerlo explícito, ya hemos desarrollado este ejemplo para que el IOC y la inyección de dependencias sea muy sencilla de hacer.
 - El primer paso será cambiar el constructor del controller a:
@@ -194,7 +195,7 @@ Vamos a reescribir nuestro post para que delegue a la lógica de negocio el rest
 	```
 - De forma similar podemos configurar el Contexto de EF. Ver en Startup.cs
 
-## 11) Entity Framework Core
+## 12) Entity Framework Core
 Antes de proceder vamos a detenernos a ver como utilizar EF Core en conjunto con IoC.
 **NOTA: Recomendamos invesitar Unit of Work y Repository Pattern, sin embargo no lo implementaremos en este ejemplo**
 - Primero tenemos que crearnos un proyecto classlib para el acceso a datos. 
