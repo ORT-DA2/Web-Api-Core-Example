@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using WAC.WebAPI.Models;
 using WAC.Contracts.Application.Users;
 using WAC.Domain.Users;
@@ -40,7 +41,7 @@ namespace WAC.WebAPI.Controllers
     }
 
     // POST api/values
-    [HttpPost]
+    [HttpPost, Authorize]
     public IActionResult Post([FromBody] UserModelIn userIn)
     {
       if (ModelState.IsValid)
