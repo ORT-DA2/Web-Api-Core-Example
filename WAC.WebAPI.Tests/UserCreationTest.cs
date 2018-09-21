@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using WAC.WebAPI.Controllers;
 using WAC.WebAPI.Models;
 using WAC.Domain.Users;
@@ -11,12 +12,57 @@ namespace WAC.WebAPI.Tests
   [TestClass]
   public class UserCreationTest
   {
+
+    [TestMethod]
+    public void GetAllUsersOkTest()
+    {
+      //Arrange: Construimos el mock y seteamos las expectativas
+      var expectedUsers = GetFakeUsers();
+      var mockUserService = new Mock<IUserService>();
+      mockUserService
+          .Setup(bl => bl.GetAll())
+          .Returns(expectedUsers);
+      var controller = new UsersController(mockUserService.Object);
+
+      //Act
+      var obtainedResult = controller.Get() as ActionResult<List<User>>;
+
+      //Assert
+      mockUserService.VerifyAll();
+      Assert.IsNotNull(obtainedResult);
+      Assert.IsNotNull(obtainedResult.Value);
+      Assert.AreEqual(obtainedResult.Value, expectedUsers);
+    }
+
+
+    [TestMethod]
+    public void GetUserOkTest()
+    {
+      //Arrange: Construimos el mock y seteamos las expectativas
+      var expectedUser = GetFakeUser();
+      var mockUserService = new Mock<IUserService>();
+      mockUserService
+          .Setup(bl => bl.Get(expectedUser.Id))
+          .Returns(expectedUser);
+
+      var controller = new UsersController(mockUserService.Object);
+
+      //Act
+      var obtainedResult = controller.Get(expectedUser.Id) as ActionResult<User>;
+
+      //Assert
+      mockUserService.Verify(m => m.Get(expectedUser.Id), Times.AtMostOnce());
+      Assert.IsNotNull(obtainedResult);
+      Assert.IsNotNull(obtainedResult.Value);
+      Assert.AreEqual(obtainedResult.Value, expectedUser);
+    }
+
     [TestMethod]
     public void CreateValidUserTest()
     {
       //Arrange
       var modelIn = new UserModelIn() { Username = "Alberto", Password = "pass", Age = 2 };
-      var fakeUser = new User("Alberto", "pass", 2);
+      var fakeUser = GetFakeUser();
 
       // Inicializar el mock a partir de IUserService
       var userServiceMock = new Mock<IUserService>();
@@ -30,9 +76,6 @@ namespace WAC.WebAPI.Tests
       var modelOut = createdResult.Value as UserModelOut;
 
       //Assert
-      //Verificamos los metodos del mock
-      userServiceMock.VerifyAll();
-
       Assert.IsNotNull(createdResult);
       Assert.AreEqual("GetById", createdResult.RouteName);
       Assert.AreEqual(201, createdResult.StatusCode);
@@ -58,9 +101,17 @@ namespace WAC.WebAPI.Tests
       Assert.IsNotNull(createdResult);
       Assert.AreEqual(400, createdResult.StatusCode);
     }
+    private List<User> GetFakeUsers()
+    {
+      return new List<User>{
+        new User("John", "Doe", 25),
+        new User("Pete", "Doe", 21),
+      };
+    }
+
     private User GetFakeUser()
     {
-      return new User("Test", "Test", 25);
+      return new User("John", "Doe", 25);
     }
   }
 
