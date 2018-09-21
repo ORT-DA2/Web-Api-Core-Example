@@ -41,7 +41,8 @@ namespace WAC.WebAPI.Controllers
     }
 
     // POST api/values
-    [HttpPost, Authorize]
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult Post([FromBody] UserModelIn userIn)
     {
       if (ModelState.IsValid)

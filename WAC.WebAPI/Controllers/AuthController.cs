@@ -38,7 +38,10 @@ namespace WAC.WebAPI.Controllers
         var tokenOptions = new JwtSecurityToken(
             issuer: "http://localhost:5000",
             audience: "http://localhost:5000",
-            claims: new List<Claim>(),
+            claims: new List<Claim>{
+              new Claim(ClaimTypes.Role, "Admin"),
+              new Claim("UserId", "1"),
+            },
             expires: DateTime.Now.AddMinutes(5),
             signingCredentials: signinCredentials
         );
