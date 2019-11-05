@@ -31,7 +31,7 @@ namespace WAC.WebAPI.Controllers
       {
         return BadRequest(ModelState);
       }
-      if (user.UserName == "johndoe" && user.Password == "def@123")
+      if (user.UserName == "johndoe" && user.Password == "123456")
       {
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
